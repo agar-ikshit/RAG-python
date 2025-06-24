@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Logicspice Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 font-sans flex items-center justify-center min-h-screen">
+
+    <div class="bg-white shadow-xl rounded-lg w-full max-w-lg p-6">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-[#EE3953]">Logicspice Product Chatbot</h2>
+      
+      <div id="chat-box" class="space-y-4 mb-4 max-h-80 overflow-y-auto border border-gray-200 rounded p-3 bg-gray-50">
+        <!-- Messages will appear here -->
+      </div>
+
+      <form id="chat-form" class="flex gap-2">
+        <input
+          type="text"
+          id="question"
+          placeholder="Ask about Logicspice products..."
+          class="flex-grow p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#EE3953]"
+          required
+        />
+        <button type="submit" class="bg-[#EE3953] text-white px-4 py-2 rounded">Ask</button>
+      </form>
+    </div>
+
+    <script>
+  const form = document.getElementById("chat-form");
+  const questionInput = document.getElementById("question");
+  const chatBox = document.getElementById("chat-box");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const question = questionInput.value.trim();
+    if (!question) return;
+
+    // Add user message
+    appendMessage("You", question, "right");
+
+    questionInput.value = "";
+
+    // Show loading message
+    const loadingMsg = appendMessage("Bot", "Typing...", "left", true);
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: "1234-test-user",
+          question: question
+        })
+      });
+
+      const data = await res.json();
+
+      // Replace loading message with actual bot response
+      loadingMsg.innerHTML = `<strong>Bot:</strong> ${data.answer || "No response."}`;
+    } catch (err) {
+      loadingMsg.innerHTML = `<strong>Bot:</strong> Sorry, something went wrong.`;
+      console.error(err);
+    }
+  });
+
+  function appendMessage(sender, message, side, returnElement = false) {
+    const msg = document.createElement("div");
+    msg.className = `text-sm p-2 rounded max-w-xs ${
+      side === "right" ? "bg-blue-100 self-end text-right ml-auto" : "bg-gray-200 self-start"
+    }`;
+    msg.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return returnElement ? msg : undefined;
+  }
+</script>
+  </body>
+</html>
