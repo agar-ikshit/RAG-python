@@ -12,7 +12,7 @@
       <h2 class="text-2xl font-semibold mb-4 text-center text-[#EE3953]">Logicspice Product Chatbot</h2>
       
       <div id="chat-box" class="space-y-4 mb-4 max-h-80 overflow-y-auto border border-gray-200 rounded p-3 bg-gray-50">
-        <!-- Messages will appear here -->
+        <!-- Messages -->
       </div>
 
       <form id="chat-form" class="flex gap-2">
@@ -32,6 +32,7 @@
   const questionInput = document.getElementById("question");
   const chatBox = document.getElementById("chat-box");
 
+  let userCounter = 1;
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const question = questionInput.value.trim();
@@ -44,20 +45,21 @@
 
     // Show loading message
     const loadingMsg = appendMessage("Bot", "Typing...", "left", true);
+    const userId = `1234-test-user-${userCounter++}`;
 
     try {
       const res = await fetch("http://127.0.0.1:8000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          user_id: "1234-test-user",
+          user_id: userId,
           question: question
         })
       });
 
       const data = await res.json();
 
-      // Replace loading message with actual bot response
+   
       loadingMsg.innerHTML = `<strong>Bot:</strong> ${data.answer || "No response."}`;
     } catch (err) {
       loadingMsg.innerHTML = `<strong>Bot:</strong> Sorry, something went wrong.`;

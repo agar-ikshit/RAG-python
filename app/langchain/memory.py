@@ -1,6 +1,5 @@
 from langchain.memory import ConversationBufferMemory
 
-# Memory per session/user (for simplicity, we use a dict to simulate sessions)
 user_memories = {}
 
 def get_memory(user_id: str):

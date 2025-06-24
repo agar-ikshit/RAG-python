@@ -4,7 +4,7 @@ from app.langchain.rag_chain import get_rag_chain
 from uuid import uuid4
 from app.db.mongo_logger import log_chat
 import traceback
-    
+
 router = APIRouter()
 
 
@@ -24,7 +24,7 @@ def chat(request: ChatRequest):
         answer = result["answer"]
 
         # Optional: derive user_name from user_id or send from frontend
-        user_name = request.user_id  # Placeholder
+        user_name = request.user_id  
 
         # Save to MongoDB
         log_chat(
@@ -34,7 +34,7 @@ def chat(request: ChatRequest):
             answer=answer
         )
 
-        # Format response
+
         return {
             "question": request.question,
             "answer": result["answer"],

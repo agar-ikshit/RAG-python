@@ -30,4 +30,4 @@ embeddings = embed_texts(texts)
 
 upsert_embeddings(embeddings, metadatas)
 
-print("✅ Upload complete.")
+print("Upload complete.")
