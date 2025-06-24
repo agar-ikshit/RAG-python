@@ -38,7 +38,7 @@ def upsert_embeddings(vectors, metadatas):
             "vector": embedding,
             "payload": {
                 **metadata,
-                "page_content": metadata["content"]  # required by retriever
+                "page_content": metadata["content"]  
             }
         })
 
@@ -52,6 +52,5 @@ def get_qdrant_client():
     return client
 
 
-# Optional: Print existing collections for debugging
 if __name__ == "__main__":
     print(client.get_collections())

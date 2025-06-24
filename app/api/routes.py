@@ -23,10 +23,10 @@ def chat(request: ChatRequest):
 
         answer = result["answer"]
 
-        # Optional: derive user_name from user_id or send from frontend
+       
         user_name = request.user_id  
 
-        # Save to MongoDB
+        # Save to Mongo
         log_chat(
             user_id=request.user_id,
             user_name=user_name,
