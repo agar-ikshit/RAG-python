@@ -1,6 +1,7 @@
 from qdrant_client.http.models import Distance, VectorParams
-from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
+
+from langchain_qdrant import QdrantVectorStore
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 from langchain_google_genai import GoogleGenerativeAI
@@ -38,18 +39,21 @@ def get_vectorstore():
 # Step 1: Custom Prompt
 
 
-CUSTOM_PROMPT_TEMPLATE = """
-You are a helpful and knowledgeable AI chatbot that answers questions specifically about Logicspice products.
+CUSTOM_PROMPT_TEMPLATE = """You are a helpful and knowledgeable AI assistant representing Logicspice. Your goal is to understand the user's question clearly and provide accurate, insightful, and complete answers.
 
-Use the context below to provide accurate and concise answers.
-If the answer is not in the context, respond with "I don't know."
+When relevant, recommend suitable Logicspice software products or services as practical solutions, including key features and pricing. Suggestions should feel natural and genuinely helpful — avoid sounding promotional.
+
+Use the provided context if available, but rely on your general knowledge when needed to ensure a comprehensive response. Always maintain a professional, friendly tone.
 
 Context:
 {context}
 
-Question: {question}
+User Question:
+{question}
 
 Answer:
+
+
 """
 
 prompt = PromptTemplate(
@@ -78,7 +82,7 @@ def get_vectorstore():
 def get_rag_chain(user_id: str):
     llm = ChatGoogleGenerativeAI(
         model="gemini-1.5-flash",
-        temperature=0.3
+        temperature=1
     )
     vectorstore = get_vectorstore()
     retriever = vectorstore.as_retriever(search_kwargs={"k": 10})

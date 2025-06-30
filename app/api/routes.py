@@ -7,7 +7,6 @@ import traceback
 
 router = APIRouter()
 
-
 class ChatRequest(BaseModel):
     user_id: str
     question: str

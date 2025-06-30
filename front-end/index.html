@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Logicspice Chatbot</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body class="bg-gray-100 font-sans flex items-center justify-center min-h-screen">
 
-    <div class="bg-white shadow-xl rounded-lg w-full max-w-lg p-6">
+    <div class="bg-white shadow-xl rounded-lg w-full max-w-5xl p-6">
       <h2 class="text-2xl font-semibold mb-4 text-center text-[#EE3953]">Logicspice Product Chatbot</h2>
       
-      <div id="chat-box" class="space-y-4 mb-4 max-h-80 overflow-y-auto border border-gray-200 rounded p-3 bg-gray-50">
+      <div id="chat-box" class="flex flex-col gap-3 mb-4 h-[75vh] overflow-y-auto border border-gray-200 rounded p-4 bg-gray-50 scroll-smooth">
         <!-- Messages -->
       </div>
 
@@ -28,55 +29,52 @@
     </div>
 
     <script>
-  const form = document.getElementById("chat-form");
-  const questionInput = document.getElementById("question");
-  const chatBox = document.getElementById("chat-box");
+      const form = document.getElementById("chat-form");
+      const questionInput = document.getElementById("question");
+      const chatBox = document.getElementById("chat-box");
 
-  let userCounter = 1;
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const question = questionInput.value.trim();
-    if (!question) return;
+      let userCounter = 1;
 
-    // Add user message
-    appendMessage("You", question, "right");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const question = questionInput.value.trim();
+        if (!question) return;
 
-    questionInput.value = "";
+        appendMessage("You", question, "right");
+        questionInput.value = "";
 
-    // Show loading message
-    const loadingMsg = appendMessage("Bot", "Typing...", "left", true);
-    const userId = `1234-test-user-${userCounter++}`;
+        const loadingMsg = appendMessage("Bot", "Typing...", "left", true);
+        const userId = `test-user-${userCounter++}`;
 
-    try {
-      const res = await fetch("http://127.0.0.1:8000/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: userId,
-          question: question
-        })
+        try {
+          const res = await fetch("http://127.0.0.1:8000/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: userId, question })
+          });
+
+          const data = await res.json();
+          let botAnswer = data.answer || "No response.";
+          const parsedAnswer = marked.parse(botAnswer);
+
+          loadingMsg.innerHTML = `<strong>Bot:</strong> ${parsedAnswer}`;
+        } catch (err) {
+          loadingMsg.innerHTML = `<strong>Bot:</strong> Sorry, something went wrong.`;
+          console.error(err);
+        }
       });
 
-      const data = await res.json();
+      function appendMessage(sender, message, side, returnElement = false) {
+        const msg = document.createElement("div");
+        msg.className = `text-sm p-2 rounded max-w-lg whitespace-pre-wrap ${
+          side === "right" ? "bg-blue-100 self-end text-right ml-auto" : "bg-gray-200 self-start"
+        }`;
 
-   
-      loadingMsg.innerHTML = `<strong>Bot:</strong> ${data.answer || "No response."}`;
-    } catch (err) {
-      loadingMsg.innerHTML = `<strong>Bot:</strong> Sorry, something went wrong.`;
-      console.error(err);
-    }
-  });
-
-  function appendMessage(sender, message, side, returnElement = false) {
-    const msg = document.createElement("div");
-    msg.className = `text-sm p-2 rounded max-w-xs ${
-      side === "right" ? "bg-blue-100 self-end text-right ml-auto" : "bg-gray-200 self-start"
-    }`;
-    msg.innerHTML = `<strong>${sender}:</strong> ${message}`;
-    chatBox.appendChild(msg);
-    chatBox.scrollTop = chatBox.scrollHeight;
-    return returnElement ? msg : undefined;
-  }
-</script>
+        msg.innerHTML = `<strong>${sender}:</strong> ${marked.parse(message)}`;
+        chatBox.appendChild(msg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return returnElement ? msg : undefined;
+      }
+    </script>
   </body>
 </html>
