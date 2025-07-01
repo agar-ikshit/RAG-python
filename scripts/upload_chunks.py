@@ -25,6 +25,7 @@ for item in data:
     metadata = item.get("metadata", {})
     metadata["content"] = item.get("content", "")
     metadatas.append(metadata)
+    print("Uploaded chunk item")
 
 embeddings = embed_texts(texts)
 
