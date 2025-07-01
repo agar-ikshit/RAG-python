@@ -1,9 +1,12 @@
 fastapi
 uvicorn[standard]
-langchain
 
+langchain
 langchain-community
-qdrant-client
-python-dotenv
 google-generativeai
+qdrant-client
+sentence-transformers
 tqdm
+python-dotenv
+pymongo
+pydantic
