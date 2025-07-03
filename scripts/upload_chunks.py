@@ -21,11 +21,13 @@ with open("logicspice_chunks.jsonl", "r") as f:
 
 texts = [item["content"] for item in data]
 metadatas = []
+print("Upload started: ")
 for item in data:
     metadata = item.get("metadata", {})
     metadata["content"] = item.get("content", "")
     metadatas.append(metadata)
-    print("Uploaded chunk item")
+    print("uploaded item:")
+   
 
 embeddings = embed_texts(texts)
 

@@ -9,7 +9,7 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Add state for sidebar toggle
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const chatBoxRef = useRef(null);
   const userCounterRef = useRef(1);
 
