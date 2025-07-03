@@ -10,3 +10,5 @@ tqdm
 python-dotenv
 pymongo
 pydantic
+
+mangum==0.17.0
