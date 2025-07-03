@@ -14,10 +14,8 @@ class ChatRequest(BaseModel):
 @router.post("/chat")
 def chat(request: ChatRequest):
     try:
-        # Create or fetch RAG chain for this user
         rag_chain = get_rag_chain(request.user_id)
 
-        # Invoke chain
         result = rag_chain.invoke({"question": request.question})
 
         answer = result["answer"]
@@ -25,7 +23,6 @@ def chat(request: ChatRequest):
        
         user_name = request.user_id  
 
-        # Save to Mongo
         log_chat(
             user_id=request.user_id,
             user_name=user_name,

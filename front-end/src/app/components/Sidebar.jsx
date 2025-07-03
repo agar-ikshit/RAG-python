@@ -1,27 +1,33 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Sidebar() {
   const [search, setSearch] = useState("");
 
   const products = [
-    "Job Board Software",
-    "Fiverr Clone Script",
-    "Crow funding Script",
-    "Inventory Management Software",
-    "Doctor Appointment Scheduling Software",
-    "Hotel Management Software",
-    "Order Management Software",
-    "Classified Ads Script",
-    "Group Chat Internal Communication Software",
-    "Recruitment Management Software",
-    "PHP Review Script",
-    "FAQ Script",
+    { name: "Job Board Software", url: "https://www.logicspice.com/job-board-software" },
+    { name: "Fiverr Clone Script", url: "https://www.logicspice.com/fiverr-clone" },
+    { name: "Crowdfunding Script", url: "https://www.logicspice.com/crowdfunding-script" },
+    { name: "Inventory Management Software", url: "https://www.logicspice.com/inventory-management-software" },
+    { name: "Doctor Appointment Scheduling Software", url: "https://www.logicspice.com/doctor-appointment-scheduling-software" },
+  
+    { name: "Classified Ads Script", url: "https://www.logicspice.com/classified-ads-script" },
+   
+    {name: "Groupon Clone", url:"https://www.logicspice.com/groupon-clone"},
+    {name: "Application Tracking System", url: "https://www.logicspice.com/applicant-tracking-system"},
+    {name: "Freelancer Clone", url: "https://www.logicspice.com/freelancer-clone"},
+    {name: "LS Inventorizerr", url: "https://www.logicspice.com/inventory-management-software"},
+    {name: "Event Booking Software", url: "https://www.logicspice.com/event-booking-software"},
+    {name: "Real Estate Script", url: "https://www.logicspice.com/real-estate-script"},
+    {name: "Human Resource Management Software", url: "https://www.logicspice.com/hrms-software"},
+    {name: "Equipment Rental Script", url: "https://www.logicspice.com/equipment-rental-software"}
+  
   ];
 
   const filteredProducts = products.filter((product) =>
-    product.toLowerCase().includes(search.toLowerCase())
+    product.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -40,7 +46,9 @@ export default function Sidebar() {
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product, index) => (
             <li key={index} className="text-sm text-gray-700 hover:bg-gray-200 p-2 rounded">
-              {product}
+              <Link href={product.url} className="block w-full">
+                {product.name}
+              </Link>
             </li>
           ))
         ) : (
